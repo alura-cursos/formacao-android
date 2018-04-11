@@ -2,19 +2,24 @@ package br.com.alura.ceep.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.ui.Cor;
+import br.com.alura.ceep.ui.recyclerview.adapter.CoresAdapter;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO;
@@ -28,6 +33,8 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private int posicaoRecibida = POSICAO_INVALIDA;
     private TextView titulo;
     private TextView descricao;
+    private Cor corSelecionada = Cor.BRANCO;
+    private ConstraintLayout constraintLayoutEntradas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +45,43 @@ public class FormularioNotaActivity extends AppCompatActivity {
         inicializaCampos();
 
         Intent dadosRecebidos = getIntent();
-        if(dadosRecebidos.hasExtra(CHAVE_NOTA)){
+        if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
             setTitle(TITULO_APPBAR_ALTERA);
             Nota notaRecebida = (Nota) dadosRecebidos
                     .getSerializableExtra(CHAVE_NOTA);
             posicaoRecibida = dadosRecebidos.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA);
             preencheCampos(notaRecebida);
         }
+
+        configuraCores();
     }
 
-    private void preencheCampos(Nota notaRecebida) {
-        titulo.setText(notaRecebida.getTitulo());
-        descricao.setText(notaRecebida.getDescricao());
+    private void configuraCores() {
+        RecyclerView listaCores = findViewById(R.id.formulario_nota_cores);
+        List<Cor> cores = Cor.todas();
+        CoresAdapter adapter = new CoresAdapter(this, cores);
+        adapter.setOnItemClickListener(new CoresAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Cor cor) {
+                aplicaFundo(cor);
+            }
+        });
+        listaCores.setAdapter(adapter);
+    }
+
+    private void preencheCampos(Nota nota) {
+        titulo.setText(nota.getTitulo());
+        descricao.setText(nota.getDescricao());
+        aplicaFundo(nota.getCor());
+    }
+
+    private void aplicaFundo(Cor cor) {
+        corSelecionada = cor;
+        constraintLayoutEntradas.setBackgroundColor(Color.parseColor(corSelecionada.toString()));
     }
 
     private void inicializaCampos() {
+        constraintLayoutEntradas = findViewById(R.id.formulario_nota_entradas);
         titulo = findViewById(R.id.formulario_nota_titulo);
         descricao = findViewById(R.id.formulario_nota_descricao);
     }
@@ -65,7 +94,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(ehMenuSalvaNota(item)){
+        if (ehMenuSalvaNota(item)) {
             Nota notaCriada = criaNota();
             retornaNota(notaCriada);
             finish();
@@ -77,13 +106,13 @@ public class FormularioNotaActivity extends AppCompatActivity {
         Intent resultadoInsercao = new Intent();
         resultadoInsercao.putExtra(CHAVE_NOTA, nota);
         resultadoInsercao.putExtra(CHAVE_POSICAO, posicaoRecibida);
-        setResult(Activity.RESULT_OK,resultadoInsercao);
+        setResult(Activity.RESULT_OK, resultadoInsercao);
     }
 
     @NonNull
     private Nota criaNota() {
         return new Nota(titulo.getText().toString(),
-                descricao.getText().toString());
+                descricao.getText().toString(), corSelecionada);
     }
 
     private boolean ehMenuSalvaNota(MenuItem item) {
