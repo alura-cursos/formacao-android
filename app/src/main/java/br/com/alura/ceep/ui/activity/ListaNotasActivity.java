@@ -4,17 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.dao.NotaDAO;
 import br.com.alura.ceep.model.Nota;
+import br.com.alura.ceep.preferences.ListaNotasPreferences;
+import br.com.alura.ceep.ui.recyclerview.LayoutManagerPreferences;
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter;
 import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 import br.com.alura.ceep.ui.recyclerview.helper.callback.NotaItemTouchHelperCallback;
@@ -30,6 +35,10 @@ public class ListaNotasActivity extends AppCompatActivity {
 
     public static final String TITULO_APPBAR = "Notas";
     private ListaNotasAdapter adapter;
+    private MenuItem linearMenu;
+    private MenuItem staggeredGridMenu;
+    private RecyclerView listaNotas;
+    private ListaNotasPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +98,60 @@ public class ListaNotasActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_lista_notas, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        linearMenu = menu.findItem(R.id.menu_lista_notas_linear);
+        staggeredGridMenu = menu.findItem(R.id.menu_lista_notas_staggered_grid);
+        configuraLayoutManagerEscolhido();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void configuraLayoutManagerEscolhido() {
+        preferences = new ListaNotasPreferences(this);
+        LayoutManagerPreferences layoutsManager = preferences.devolveLayoutManagerSelecionado();
+        if (layoutsManager.equals(LayoutManagerPreferences.LINEAR)) {
+            mostraLinearLayout();
+            return;
+        }
+        mostraStaggeredGridLayout();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.menu_lista_notas_staggered_grid) {
+            mostraStaggeredGridLayout();
+            preferences.salvaLayoutManager(LayoutManagerPreferences.STAGGERED_GRID);
+        }
+
+        if (itemId == R.id.menu_lista_notas_linear) {
+            mostraLinearLayout();
+            preferences.salvaLayoutManager(LayoutManagerPreferences.LINEAR);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void mostraStaggeredGridLayout() {
+        staggeredGridMenu.setVisible(false);
+        linearMenu.setVisible(true);
+        listaNotas.setLayoutManager(
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+    }
+
+    private void mostraLinearLayout() {
+        staggeredGridMenu.setVisible(true);
+        linearMenu.setVisible(false);
+        listaNotas.setLayoutManager(new LinearLayoutManager(this));
+    }
+
     private void altera(Nota nota, int posicao) {
         new NotaDAO().altera(posicao, nota);
         adapter.altera(posicao, nota);
@@ -130,7 +193,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void configuraRecyclerView(List<Nota> todasNotas) {
-        RecyclerView listaNotas = findViewById(R.id.lista_notas_recyclerview);
+        listaNotas = findViewById(R.id.lista_notas_recyclerview);
         configuraAdapter(todasNotas, listaNotas);
         configuraItemTouchHelper(listaNotas);
     }
