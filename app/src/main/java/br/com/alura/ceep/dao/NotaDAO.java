@@ -109,7 +109,7 @@ public class NotaDAO extends SQLiteOpenHelper {
         db.execSQL(diminuiUmaPosicao);
     }
 
-    private void aumentaPosicoes(){
+    private void aumentaPosicoes() {
         String diminuiUmaPosicao = "UPDATE " + NOTAS +
                 " SET " + POSICAO + " = " + POSICAO + " + 1";
         SQLiteDatabase db = getWritableDatabase();
@@ -127,5 +127,6 @@ public class NotaDAO extends SQLiteOpenHelper {
         nota.setPosicao(posicao);
         altera(nota);
     }
+
 
 }

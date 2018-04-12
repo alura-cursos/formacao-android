@@ -17,13 +17,11 @@ import java.util.List;
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Cor;
 import br.com.alura.ceep.model.Nota;
-
 import br.com.alura.ceep.ui.recyclerview.adapter.CoresAdapter;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
 
 public class FormularioNotaActivity extends AppCompatActivity {
-
 
     private static final String TITULO_APPBAR_INSERE = "Insere nota";
     private static final String TITULO_APPBAR_ALTERA = "Altera nota";
@@ -116,7 +114,6 @@ public class FormularioNotaActivity extends AppCompatActivity {
     private boolean ehMenuSalvaNota(MenuItem item) {
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
