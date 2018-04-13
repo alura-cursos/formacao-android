@@ -13,7 +13,6 @@ import java.util.List;
 import br.com.alura.ceep.model.Cor;
 import br.com.alura.ceep.model.Nota;
 
-
 public class NotaDAO extends SQLiteOpenHelper {
 
     public static final String NOTAS = "Notas";

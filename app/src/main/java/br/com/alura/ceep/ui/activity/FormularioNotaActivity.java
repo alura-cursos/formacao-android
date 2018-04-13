@@ -17,6 +17,10 @@ import java.util.List;
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Cor;
 import br.com.alura.ceep.model.Nota;
+<<<<<<< a11ae99c85971827422cbbe29171bc566c5edce1
+=======
+import br.com.alura.ceep.model.Cor;
+>>>>>>> ajuste e resolução de bugs
 import br.com.alura.ceep.ui.recyclerview.adapter.CoresAdapter;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
