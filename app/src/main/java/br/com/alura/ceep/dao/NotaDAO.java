@@ -66,14 +66,6 @@ public class NotaDAO extends SQLiteOpenHelper {
         return notas;
     }
 
-    public Nota insere(Nota nota) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues notaComDados = populaDados(nota);
-        long idGerado = db.insert(NOTAS, null, notaComDados);
-        nota.setId(idGerado);
-        return nota;
-    }
-
     @NonNull
     private ContentValues populaDados(Nota nota) {
         ContentValues dados = new ContentValues();
@@ -83,6 +75,15 @@ public class NotaDAO extends SQLiteOpenHelper {
         dados.put(COR, nota.getCor().toString());
         dados.put(POSICAO, nota.getPosicao().toString());
         return dados;
+    }
+
+    public Nota insere(Nota nota) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues notaComDados = populaDados(nota);
+        aumentaPosicoes();
+        long idGerado = db.insert(NOTAS, null, notaComDados);
+        nota.setId(idGerado);
+        return nota;
     }
 
     public void altera(Nota nota) {
@@ -97,13 +98,20 @@ public class NotaDAO extends SQLiteOpenHelper {
         String[] params = {nota.getId().toString()};
         Integer posicaoNotaRemovida = nota.getPosicao();
         db.delete(NOTAS, ID + "= ?", params);
-        ajustaPosicao(posicaoNotaRemovida);
+        diminuiPosicoesApartirDe(posicaoNotaRemovida);
     }
 
-    private void ajustaPosicao(int posicao) {
+    private void diminuiPosicoesApartirDe(int posicao) {
         String diminuiUmaPosicao = "UPDATE " + NOTAS +
-                " SET " + POSICAO + " = " + POSICAO + -1 +
+                " SET " + POSICAO + " = " + POSICAO + " - 1" +
                 " WHERE " + POSICAO + " > " + posicao;
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(diminuiUmaPosicao);
+    }
+
+    private void aumentaPosicoes(){
+        String diminuiUmaPosicao = "UPDATE " + NOTAS +
+                " SET " + POSICAO + " = " + POSICAO + " + 1";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(diminuiUmaPosicao);
     }
@@ -111,7 +119,6 @@ public class NotaDAO extends SQLiteOpenHelper {
     public void troca(Nota notaInicial, Nota notaFinal) {
         Integer posicaoInicial = notaInicial.getPosicao();
         Integer posicaoFinal = notaFinal.getPosicao();
-
         trocaPosicao(notaInicial, posicaoFinal);
         trocaPosicao(notaFinal, posicaoInicial);
     }

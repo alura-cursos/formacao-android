@@ -52,8 +52,8 @@ public class NotaItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private void removeNota(int posicao) {
         Nota nota = adapter.devolveNotaPorPosicao(posicao);
-        DAO.remove(nota);
         adapter.remove(posicao);
+        DAO.remove(nota);
     }
 
 

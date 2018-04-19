@@ -140,8 +140,8 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void altera(Nota nota) {
-        DAO.altera(nota);
         adapter.altera(nota);
+        DAO.altera(nota);
     }
 
     private boolean ehResultadoAlteraNota(int requestCode, Intent data) {
@@ -154,7 +154,6 @@ public class ListaNotasActivity extends AppCompatActivity {
     }
 
     private void adiciona(Nota nota) {
-        nota.setPosicao(adapter.getItemCount());
         Nota notaInserida = DAO.insere(nota);
         adapter.adiciona(notaInserida);
     }

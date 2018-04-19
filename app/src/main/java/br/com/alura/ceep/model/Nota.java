@@ -29,6 +29,7 @@ public class Nota implements Serializable {
 
     public Nota() {
         this.cor = Cor.BRANCO;
+        this.posicao = 0;
     }
 
     public Long getId() {

@@ -3,6 +3,7 @@ package br.com.alura.ceep.ui.recyclerview.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
         public void vincula(Nota nota) {
             this.nota = nota;
+            this.nota.setPosicao(getAdapterPosition());
             preencheCampo(nota);
             aplicaFundo(nota);
         }
@@ -97,8 +99,8 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     }
 
     public void adiciona(Nota nota) {
-        notas.add(nota);
-        notifyDataSetChanged();
+        notas.add(0, nota);
+        notifyItemInserted(0);
     }
 
     public Nota devolveNotaPorPosicao(int posicao) {
