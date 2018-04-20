@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Cor {
+
     BRANCO, AZUL, AMARELO, VERMELHO, VERDE, LILAS, GRAY, BROWN, ROXO;
+
 
     private String hex;
 

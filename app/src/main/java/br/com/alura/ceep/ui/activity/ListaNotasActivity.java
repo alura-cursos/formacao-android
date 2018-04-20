@@ -88,6 +88,7 @@ public class ListaNotasActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_lista_notas, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -123,7 +124,16 @@ public class ListaNotasActivity extends AppCompatActivity {
             preferences.salvaLayoutManager(LayoutManagerPreferences.LINEAR);
         }
 
+        if(itemId == R.id.menu_lista_notas_ajuda){
+            vaiParaFeedback();
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void vaiParaFeedback() {
+        Intent abreTelaFeedback = new Intent(this, FeedbackActivity.class);
+        startActivity(abreTelaFeedback);
     }
 
     private void mostraStaggeredGridLayout() {
