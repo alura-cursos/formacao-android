@@ -4,9 +4,17 @@ import java.io.Serializable;
 
 public class Nota implements Serializable {
 
+    private Long id;
     private String titulo;
     private String descricao;
     private Cor cor;
+    private Integer posicao;
+
+    public Nota(Long id, String titulo, String descricao, Cor cor, Integer posicao) {
+        this(titulo, descricao, cor);
+        this.posicao = posicao;
+        this.id = id;
+    }
 
     public Nota(String titulo, String descricao) {
         this();
@@ -23,6 +31,10 @@ public class Nota implements Serializable {
         this.cor = Cor.BRANCO;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -35,13 +47,16 @@ public class Nota implements Serializable {
         return cor;
     }
 
-    @Override
-    public String toString() {
-        return "Nota{" +
-                "titulo='" + titulo + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", cor=" + cor +
-                '}';
+    public Integer getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(int posicao) {
+        this.posicao = posicao;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setTitulo(String titulo) {

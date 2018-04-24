@@ -13,7 +13,6 @@ import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
-import br.com.alura.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 
 public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder> {
 
@@ -39,7 +38,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
 
     @Override
     public void onBindViewHolder(ListaNotasAdapter.NotaViewHolder holder, int position) {
-        Nota nota = notas.get(position);
+        Nota nota = devolveNotaPorPosicao(position);
         holder.vincula(nota);
     }
 
@@ -48,8 +47,8 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         return notas.size();
     }
 
-    public void altera(int posicao, Nota nota) {
-        notas.set(posicao, nota);
+    public void altera(Nota nota) {
+        notas.set(nota.getPosicao(), nota);
         notifyDataSetChanged();
     }
 
@@ -76,7 +75,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onItemClickListener.onItemClick(nota, getAdapterPosition());
+                    onItemClickListener.onItemClick(nota);
                 }
             });
         }
@@ -100,6 +99,14 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
     public void adiciona(Nota nota) {
         notas.add(nota);
         notifyDataSetChanged();
+    }
+
+    public Nota devolveNotaPorPosicao(int posicao) {
+        return notas.get(posicao);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Nota nota);
     }
 
 }

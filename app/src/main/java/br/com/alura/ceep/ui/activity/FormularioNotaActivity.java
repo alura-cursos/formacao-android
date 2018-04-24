@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
-import java.io.Serializable;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -22,18 +20,15 @@ import br.com.alura.ceep.model.Nota;
 import br.com.alura.ceep.ui.recyclerview.adapter.CoresAdapter;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_POSICAO;
-import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.POSICAO_INVALIDA;
 
 public class FormularioNotaActivity extends AppCompatActivity {
 
 
-    public static final String TITULO_APPBAR_INSERE = "Insere nota";
-    public static final String TITULO_APPBAR_ALTERA = "Altera nota";
-    private int posicaoRecibida = POSICAO_INVALIDA;
-    private Nota nota;
+    private static final String TITULO_APPBAR_INSERE = "Insere nota";
+    private static final String TITULO_APPBAR_ALTERA = "Altera nota";
     private EditText titulo;
     private EditText descricao;
+    private Nota nota;
     private ConstraintLayout constraintLayoutEntradas;
 
     @Override
@@ -45,17 +40,19 @@ public class FormularioNotaActivity extends AppCompatActivity {
         inicializaCampos();
 
         Intent dadosRecebidos = getIntent();
-        if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
+        inicializaNota(dadosRecebidos);
+        configuraCores();
+    }
+
+    private void inicializaNota(Intent dados) {
+        if (dados.hasExtra(CHAVE_NOTA)) {
             setTitle(TITULO_APPBAR_ALTERA);
-            nota = (Nota) dadosRecebidos
+            nota = (Nota) dados
                     .getSerializableExtra(CHAVE_NOTA);
-            posicaoRecibida = dadosRecebidos.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA);
             preencheCampos();
         } else if (nota == null) {
-            nota = new Nota();
+            this.nota = new Nota();
         }
-
-        configuraCores();
     }
 
     private void configuraCores() {
@@ -104,21 +101,21 @@ public class FormularioNotaActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void retornaNota() {
-        Intent resultadoInsercao = new Intent();
-        resultadoInsercao.putExtra(CHAVE_NOTA, nota);
-        resultadoInsercao.putExtra(CHAVE_POSICAO, posicaoRecibida);
-        setResult(Activity.RESULT_OK, resultadoInsercao);
-    }
-
     private void preencheNota() {
         this.nota.setTitulo(titulo.getText().toString());
         this.nota.setDescricao(descricao.getText().toString());
     }
 
+    private void retornaNota() {
+        Intent resultadoInsercao = new Intent();
+        resultadoInsercao.putExtra(CHAVE_NOTA, nota);
+        setResult(Activity.RESULT_OK, resultadoInsercao);
+    }
+
     private boolean ehMenuSalvaNota(MenuItem item) {
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -139,4 +136,5 @@ public class FormularioNotaActivity extends AppCompatActivity {
         }
         super.onRestoreInstanceState(savedInstanceState);
     }
+
 }
