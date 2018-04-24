@@ -2,23 +2,25 @@ package br.com.alura.ceep.model;
 
 import java.io.Serializable;
 
-import br.com.alura.ceep.ui.Cor;
-
 public class Nota implements Serializable {
 
-    private final String titulo;
-    private final String descricao;
+    private String titulo;
+    private String descricao;
     private Cor cor;
 
     public Nota(String titulo, String descricao) {
+        this();
         this.titulo = titulo;
         this.descricao = descricao;
-        this.cor = Cor.BRANCO;
     }
 
     public Nota(String titulo, String descricao, Cor cor) {
         this(titulo, descricao);
         this.cor = cor;
+    }
+
+    public Nota() {
+        this.cor = Cor.BRANCO;
     }
 
     public String getTitulo() {
@@ -40,5 +42,17 @@ public class Nota implements Serializable {
                 ", descricao='" + descricao + '\'' +
                 ", cor=" + cor +
                 '}';
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setCor(Cor cor) {
+        this.cor = cor;
     }
 }

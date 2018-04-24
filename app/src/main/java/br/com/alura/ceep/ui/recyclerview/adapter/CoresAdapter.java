@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.com.alura.ceep.R;
-import br.com.alura.ceep.ui.Cor;
+import br.com.alura.ceep.model.Cor;
 
 public class CoresAdapter extends RecyclerView.Adapter<CoresAdapter.CoresViewHolder> {
 
@@ -64,7 +64,7 @@ public class CoresAdapter extends RecyclerView.Adapter<CoresAdapter.CoresViewHol
         public void vincula(Cor cor) {
             this.cor = cor;
             Drawable drawable = itemView.getBackground();
-            drawable.setColorFilter(Color.parseColor(cor.toString()), PorterDuff.Mode.SRC_ATOP);
+            drawable.setColorFilter(Color.parseColor(cor.getHex()), PorterDuff.Mode.SRC_ATOP);
         }
 
     }

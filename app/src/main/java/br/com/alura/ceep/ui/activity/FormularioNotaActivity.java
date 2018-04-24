@@ -4,21 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.alura.ceep.R;
+import br.com.alura.ceep.model.Cor;
 import br.com.alura.ceep.model.Nota;
-import br.com.alura.ceep.ui.Cor;
 import br.com.alura.ceep.ui.recyclerview.adapter.CoresAdapter;
 
 import static br.com.alura.ceep.ui.activity.NotaActivityConstantes.CHAVE_NOTA;
@@ -31,9 +30,9 @@ public class FormularioNotaActivity extends AppCompatActivity {
     public static final String TITULO_APPBAR_INSERE = "Insere nota";
     public static final String TITULO_APPBAR_ALTERA = "Altera nota";
     private int posicaoRecibida = POSICAO_INVALIDA;
-    private TextView titulo;
-    private TextView descricao;
-    private Cor corSelecionada = Cor.BRANCO;
+    private Nota nota;
+    private EditText titulo;
+    private EditText descricao;
     private ConstraintLayout constraintLayoutEntradas;
 
     @Override
@@ -47,10 +46,12 @@ public class FormularioNotaActivity extends AppCompatActivity {
         Intent dadosRecebidos = getIntent();
         if (dadosRecebidos.hasExtra(CHAVE_NOTA)) {
             setTitle(TITULO_APPBAR_ALTERA);
-            Nota notaRecebida = (Nota) dadosRecebidos
+            nota = (Nota) dadosRecebidos
                     .getSerializableExtra(CHAVE_NOTA);
             posicaoRecibida = dadosRecebidos.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA);
-            preencheCampos(notaRecebida);
+            preencheCampos();
+        } else {
+            nota = new Nota();
         }
 
         configuraCores();
@@ -63,21 +64,21 @@ public class FormularioNotaActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new CoresAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Cor cor) {
-                aplicaFundo(cor);
+                nota.setCor(cor);
+                aplicaFundo();
             }
         });
         listaCores.setAdapter(adapter);
     }
 
-    private void preencheCampos(Nota nota) {
+    private void preencheCampos() {
         titulo.setText(nota.getTitulo());
         descricao.setText(nota.getDescricao());
-        aplicaFundo(nota.getCor());
+        aplicaFundo();
     }
 
-    private void aplicaFundo(Cor cor) {
-        corSelecionada = cor;
-        constraintLayoutEntradas.setBackgroundColor(Color.parseColor(corSelecionada.toString()));
+    private void aplicaFundo() {
+        constraintLayoutEntradas.setBackgroundColor(Color.parseColor(nota.getCor().getHex()));
     }
 
     private void inicializaCampos() {
@@ -95,27 +96,27 @@ public class FormularioNotaActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (ehMenuSalvaNota(item)) {
-            Nota notaCriada = criaNota();
-            retornaNota(notaCriada);
+            preencheNota();
+            retornaNota();
             finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void retornaNota(Nota nota) {
+    private void retornaNota() {
         Intent resultadoInsercao = new Intent();
         resultadoInsercao.putExtra(CHAVE_NOTA, nota);
         resultadoInsercao.putExtra(CHAVE_POSICAO, posicaoRecibida);
         setResult(Activity.RESULT_OK, resultadoInsercao);
     }
 
-    @NonNull
-    private Nota criaNota() {
-        return new Nota(titulo.getText().toString(),
-                descricao.getText().toString(), corSelecionada);
+    private void preencheNota() {
+        this.nota.setTitulo(titulo.getText().toString());
+        this.nota.setDescricao(descricao.getText().toString());
     }
 
     private boolean ehMenuSalvaNota(MenuItem item) {
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
     }
+
 }
