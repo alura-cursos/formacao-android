@@ -88,7 +88,7 @@ public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.No
         }
 
         private void aplicaFundo(Nota nota) {
-            itemView.setBackgroundColor(Color.parseColor(nota.getCor().toString()));
+            itemView.setBackgroundColor(Color.parseColor(nota.getCor().getHex()));
         }
 
         private void preencheCampo(Nota nota) {

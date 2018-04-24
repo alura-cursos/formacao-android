@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.com.alura.ceep.R;
@@ -50,7 +51,7 @@ public class FormularioNotaActivity extends AppCompatActivity {
                     .getSerializableExtra(CHAVE_NOTA);
             posicaoRecibida = dadosRecebidos.getIntExtra(CHAVE_POSICAO, POSICAO_INVALIDA);
             preencheCampos();
-        } else {
+        } else if (nota == null) {
             nota = new Nota();
         }
 
@@ -119,4 +120,23 @@ public class FormularioNotaActivity extends AppCompatActivity {
         return item.getItemId() == R.id.menu_formulario_nota_ic_salva;
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(CHAVE_NOTA, nota);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            nota = (Nota) savedInstanceState.getSerializable(CHAVE_NOTA);
+            preencheCampos();
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 }
