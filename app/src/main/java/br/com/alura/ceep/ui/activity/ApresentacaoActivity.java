@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 
 import br.com.alura.ceep.R;
@@ -11,7 +12,7 @@ import br.com.alura.ceep.preferences.ApresentacaoPreferences;
 
 public class ApresentacaoActivity extends AppCompatActivity {
 
-    private static final int TEMPO_PRIMEIRA_APRESENTACAO = 1500;
+    private static final int TEMPO_PRIMEIRA_APRESENTACAO = 2000;
     private static final int TEMPO_JA_APRESENTADO = 500;
     private ApresentacaoPreferences preferences;
 
@@ -22,8 +23,9 @@ public class ApresentacaoActivity extends AppCompatActivity {
         preferences = new ApresentacaoPreferences(this);
         if (preferences.naoFoiApresentado()) {
             mostraApresentacao(TEMPO_PRIMEIRA_APRESENTACAO);
+        } else {
+            mostraApresentacao(TEMPO_JA_APRESENTADO);
         }
-        mostraApresentacao(TEMPO_JA_APRESENTADO);
     }
 
     private void mostraApresentacao(int tempoApresentacao) {

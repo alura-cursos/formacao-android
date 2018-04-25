@@ -7,12 +7,10 @@
     android:background="@color/colorPrimary"
     tools:context=".ui.activity.ApresentacaoActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ceep"
-        android:textSize="48sp"
-        android:textColor="#ffffff"
+    <ImageView
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/ceep_logo_branco"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
