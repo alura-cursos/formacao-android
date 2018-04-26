@@ -16,5 +16,5 @@
         android:id="@+id/menu_lista_notas_ajuda"
         android:icon="@drawable/ic_action_ajuda"
         android:title="Ajuda e suporte"
-        app:showAsAction="always|withText" />
+        app:showAsAction="always" />
 </menu>
